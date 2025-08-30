@@ -29,6 +29,7 @@ int main() {
     sf::CircleShape player(50);
     player.setFillColor(sf::Color::Green);
     player.setPosition({200, 250});
+    float speed = 3.f;
 
     // Set up player response
     std::string playerInput = "";
@@ -80,6 +81,27 @@ int main() {
                     playerInput.clear();
                     inputText.setString(""); // Clear the input display
                 }
+            }
+            // Move player with arrow keys
+            // Diagonal
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Left) && sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Up)) {
+                player.move({-speed, -speed});
+            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Left) && sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Down)) {
+                player.move({-speed, speed});
+            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Right) && sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Up)) {
+                player.move({speed, -speed});
+            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Right) && sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Down)) {
+                player.move({speed, speed});
+            }
+            // Non diagonal
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Left)) {
+                player.move({-speed, 0.0f});
+            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Right)) {
+                player.move({speed, 0.0f});
+            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Up)) {
+                player.move({0.0f, -speed});
+            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Down)) {
+                player.move({0.0f, speed});
             }
         }
 
