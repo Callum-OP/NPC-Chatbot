@@ -31,7 +31,9 @@ int main() {
     player.setPosition({200, 250});
 
     // Set up player response
-    std::string playerInput = "Good day";
+    std::string playerInput = "";
+    sf::Text inputText(font, "", 20);;
+    inputText.setPosition({50, 500});
 
     // Create NPC
     sf::CircleShape npc(50);
@@ -52,14 +54,38 @@ int main() {
         while (const std::optional event = window.pollEvent())
         {
             // Close window properly
-            if (event->is<sf::Event::Closed>())
+            if (event->is<sf::Event::Closed>()) {
                 window.close();
+            }
+            // Check for player input or backspace
+            if (const auto* textEntered = event->getIf<sf::Event::TextEntered>()) {
+                // If backspace then remove from input
+                if (static_cast<char>(textEntered->unicode) == '\b' && !playerInput.empty()) {
+                    playerInput.pop_back();
+                }
+                // If a valid letter then add to input
+                else if (textEntered->unicode < 128) {
+                    playerInput += static_cast<char>(textEntered->unicode); }
+            }
+            // Check for Enter key
+            if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>()) {
+                // If enter then send player input to npc
+                if (keyPressed->scancode == sf::Keyboard::Scan::Enter) {
+                    std::string reply = getNPCResponse(playerInput);
+                    npcText.setString(reply);
+                    playerInput.clear();
+                    inputText.setString(""); // Clear the input display
+                }
+            }
         }
 
+        inputText.setString(playerInput);
+            
         window.clear(sf::Color::Black);
         window.draw(player);
         window.draw(npc);
         window.draw(npcText);
+        window.draw(inputText);
         window.display();
     }
 

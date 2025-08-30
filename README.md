@@ -1,10 +1,10 @@
 # How to run
 
-Open main.exe to run
+In the root directory
+Run: python npc_server.py
+Then open main.exe to run
 
-Command to compile: cl /EHsc /std:c++17 /I external/SFML-3.0.0/include main.cpp /link /LIBPATH:external/SFML-3.0.0/lib sfml-graphics.lib sfml-window.lib sfml-system.lib
-
-cl /EHsc /std:c++17 main.cpp ^
+Command to compile: cl /EHsc /std:c++17 main.cpp ^
   /Iexternal\httplib ^
   /Iexternal\nlohmann ^
   /Iexternal\SFML-3.0.0\include ^
