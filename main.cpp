@@ -32,8 +32,12 @@ int main() {
 
     // Set up player response
     std::string playerInput = "";
-    sf::Text inputText(font, "", 20);;
-    inputText.setPosition({50, 500});
+    sf::Text inputText(font, "", 20);
+    // Place text above NPC
+    inputText.setPosition({
+        player.getPosition().x + player.getRadius() - 80,
+        player.getPosition().y + player.getRadius() - 80
+    });
 
     // Create NPC
     sf::CircleShape npc(50);
