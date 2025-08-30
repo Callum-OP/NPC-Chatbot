@@ -8,10 +8,10 @@
             "args": [
                 "/EHsc",
                 "/std:c++17", // Enable C++17
-                "/I", "SFML-3.0.0/include",
+                "/I", "external/SFML-3.0.0/include",
                 "${file}", // Passes the source file
                 "/link",
-                "/LIBPATH:SFML-3.0.0/lib",
+                "/LIBPATH:external/SFML-3.0.0/lib",
                 "sfml-graphics.lib",
                 "sfml-window.lib",
                 "sfml-system.lib"
