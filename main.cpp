@@ -1,8 +1,9 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 #include <iostream>
 #include <optional>
 #include "json.hpp"
-#include "external/httplib/httplib.h"  // Replace with your actual path
+#include "external/httplib/httplib.h"
 
 using json = nlohmann::json;
 
@@ -13,7 +14,7 @@ std::string getNPCResponse(const std::string& input) {
     auto res = cli.Post("/chat", payload.dump(), "application/json");
     if (!res || res->status != 200) {
         std::cerr << "Failed to get response from server\n";
-        return "Error: No reply";
+        return "We'll chat later";
     }
 
     auto replyJson = json::parse(res->body);
@@ -22,6 +23,7 @@ std::string getNPCResponse(const std::string& input) {
 
 int main() {
     sf::RenderWindow window(sf::VideoMode({800, 600}), "NPC Chatbot");
+    sf::Font font("assets/fonts/arial.ttf");
 
     // Create player
     sf::CircleShape player(50);
@@ -37,10 +39,8 @@ int main() {
     npc.setPosition({500, 250});
 
     // Set up NPC text
-    sf::Font font("assets/fonts/arial.ttf");
     sf::Text npcText(font, "Hello there", 20);
     npcText.setString(std::string(getNPCResponse(playerInput)));
-
     // Place text above NPC
     npcText.setPosition({
         npc.getPosition().x + npc.getRadius() - 80,
@@ -48,11 +48,12 @@ int main() {
     });
 
     while (window.isOpen()) {
-        while (auto eventOpt = window.pollEvent()) {
-            const sf::Event& event = *eventOpt;
-            if (event.is<sf::Event::Closed>()) {
+        // Process events
+        while (const std::optional event = window.pollEvent())
+        {
+            // Close window properly
+            if (event->is<sf::Event::Closed>())
                 window.close();
-            }
         }
 
         window.clear(sf::Color::Black);
