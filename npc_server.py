@@ -17,24 +17,18 @@ client = OpenAI(
 messages=[
         {"role": "system", "content": "You are a witty and friendly bystander in a large but empty world."},
     ]
-response = client.chat.completions.create(
-    model="openai/gpt-oss-20b:fireworks-ai",
-    messages=messages
-)
 
 # List of messages over time
 messages = []
 
 # Function to get a reply from AI
 def generate_reply(message):
-    message = "hello"
     message = message.lower()
     messages.append({"role": "user", "content": message})
     response = client.chat.completions.create(
         model="openai/gpt-oss-20b:fireworks-ai",
         messages=messages
     )
-    print(response.choices[0].message.content)
     return (response.choices[0].message.content)
     
 # Send reply to frontend
