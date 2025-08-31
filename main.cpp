@@ -23,6 +23,7 @@ std::string getNPCResponse(const std::string& input) {
 
 int main() {
     sf::RenderWindow window(sf::VideoMode({800, 600}), "NPC Chatbot");
+    window.setFramerateLimit(60);
     sf::Font font("assets/fonts/arial.ttf");
 
     // Create player
@@ -82,30 +83,30 @@ int main() {
                     inputText.setString(""); // Clear the input display
                 }
             }
-            // Move player with arrow keys
-            // Diagonal
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Left) && sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Up)) {
-                player.move({-speed, -speed});
-            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Left) && sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Down)) {
-                player.move({-speed, speed});
-            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Right) && sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Up)) {
-                player.move({speed, -speed});
-            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Right) && sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Down)) {
-                player.move({speed, speed});
-            }
-            // Non diagonal
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Left)) {
-                player.move({-speed, 0.0f});
-            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Right)) {
-                player.move({speed, 0.0f});
-            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Up)) {
-                player.move({0.0f, -speed});
-            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Down)) {
-                player.move({0.0f, speed});
-            }
         }
-
         inputText.setString(playerInput);
+
+        // Move player with arrow keys
+        // Diagonal
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Left) && sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Up)) {
+            player.move({-speed / 1.5f, -speed / 1.5f});
+        } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Left) && sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Down)) {
+            player.move({-speed / 1.5f, speed / 1.5f});
+        } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Right) && sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Up)) {
+            player.move({speed / 1.5f, -speed / 1.5f});
+        } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Right) && sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Down)) {
+            player.move({speed / 1.5f, speed / 1.5f});
+        }
+        // Non diagonal
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Left)) {
+            player.move({-speed, 0.0f});
+        } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Right)) {
+            player.move({speed, 0.0f});
+        } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Up)) {
+            player.move({0.0f, -speed});
+        } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Down)) {
+            player.move({0.0f, speed});
+        }
             
         window.clear(sf::Color::Black);
         window.draw(player);
