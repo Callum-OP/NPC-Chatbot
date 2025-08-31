@@ -13,6 +13,17 @@ cl /EHsc /std:c++17 main.cpp ^
   /LIBPATH:external\SFML-3.0.0\lib ^
   sfml-graphics.lib sfml-window.lib sfml-system.lib ws2_32.lib
 
+# About the app
+A chatbot feature designed with C++ SFML and Python Flask using Open AI gpt-oss-20b to give non player characters (NPCs) advanced dialogue options, making them able to respond to the player in real time with new and unique responses to what the player types/asks the NPC.
+
+Issues:
+Text response does not wrap, long responses will fall of the screen.
+Special characters may not show correctly because of the font. (They look fine when printing to console).
+
+Features to consider:
+Multiple NPCs.
+Can only speak to NPCs within a certain radius.
+
 # Things to note
 My laptop is not powerful enough to run gpt-oss-20b locally, so will use huggingface to use it remotely for free with a limited number of requests. The API key needs to be hidden so it can not be misused.
 
