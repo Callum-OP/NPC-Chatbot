@@ -18,3 +18,10 @@ My laptop is not powerful enough to run gpt-oss-20b locally, so will use hugging
 
 I have MSVC installed on my computer at "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.31.31103\\bin\\Hostx64\\x64\\cl.exe"
 to be able to compile it.
+
+# Learning materials
+For Python backend AI
+https://huggingface.co/openai/gpt-oss-20b
+
+For frontend C++ SFML code
+https://www.sfml-dev.org/documentation/3.0.0/
