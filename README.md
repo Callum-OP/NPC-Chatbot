@@ -13,6 +13,10 @@ cl /EHsc /std:c++17 main.cpp ^
   /LIBPATH:external\SFML-3.0.0\lib ^
   sfml-graphics.lib sfml-window.lib sfml-system.lib ws2_32.lib
 
+# How to play
+You can move the player with arrow keys.
+Type in text and hit enter to send a message to an NPC, you will see the text appear above the player as you type, the NPC will respond with a message above them.
+
 # About the app
 A chatbot feature designed with C++ SFML and Python Flask using Open AI gpt-oss-20b to give non player characters (NPCs) advanced dialogue options, making them able to respond to the player in real time with new and unique responses to what the player types/asks the NPC.
 
