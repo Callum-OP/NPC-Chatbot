@@ -35,11 +35,14 @@ int main() {
     // Set up player response
     std::string playerInput = "";
     sf::Text inputText(font, "", 20);
-    // Place text above NPC
+    // Place text above Player
     inputText.setPosition({
-        player.getPosition().x + player.getRadius() - 80,
+        player.getPosition().x + player.getRadius(),
         player.getPosition().y + player.getRadius() - 80
     });
+    // Centre text
+    sf::FloatRect inputBounds = inputText.getLocalBounds();
+    inputText.setOrigin(inputBounds.size / 2.0f);
 
     // Create NPC
     sf::CircleShape npc(50);
@@ -47,13 +50,16 @@ int main() {
     npc.setPosition({500, 250});
 
     // Set up NPC text
-    sf::Text npcText(font, "Hello there", 20);
+    sf::Text npcText(font, "", 20);
     npcText.setString(std::string(getNPCResponse(playerInput)));
     // Place text above NPC
     npcText.setPosition({
-        npc.getPosition().x + npc.getRadius() - 80,
+        npc.getPosition().x + npc.getRadius(),
         npc.getPosition().y + npc.getRadius() - 80
     });
+    // Centre text
+    sf::FloatRect bounds = npcText.getLocalBounds();
+    npcText.setOrigin(bounds.size / 2.0f);
 
     while (window.isOpen()) {
         // Process events
@@ -107,6 +113,15 @@ int main() {
         } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Down)) {
             player.move({0.0f, speed});
         }
+
+        // Place text above Player
+        inputText.setPosition({
+            player.getPosition().x + player.getRadius(),
+            player.getPosition().y + player.getRadius() - 80
+        });
+        // Centre text
+        sf::FloatRect inputBounds = inputText.getLocalBounds();
+        inputText.setOrigin(inputBounds.size / 2.0f);
             
         window.clear(sf::Color::Black);
         window.draw(player);
