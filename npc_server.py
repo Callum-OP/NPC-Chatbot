@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify
-from transformers import pipeline
 from openai import OpenAI
 import os
 from dotenv import load_dotenv

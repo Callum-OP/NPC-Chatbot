@@ -51,7 +51,6 @@ int main() {
 
     // Set up NPC text
     sf::Text npcText(font, "", 20);
-    npcText.setString(std::string(getNPCResponse(playerInput)));
     // Place text above NPC
     npcText.setPosition({
         npc.getPosition().x + npc.getRadius(),
