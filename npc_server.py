@@ -16,7 +16,10 @@ client = OpenAI(
 # List of messages over time
 # Set up NPC personality
 messages=[
-        {"role": "system", "content": "Your name is James Ironside, you are a witty and friendly blacksmith in a large but empty world who prefers to speak with short responses."},
+        {"role": "system", "content": "Your name is James Ironside, "
+        "you are a witty and friendly blacksmith in a large but empty world who prefers to speak with short responses. "
+        "You also always reply using only ASCII characters, which means no emojis, smart punctuation, or non-ASCII symbols. "
+        "Avoid curly quotes, accented letters, and special characters. Keep it simple and readable."},
     ]
 
 # Function to get a reply from AI
@@ -28,6 +31,7 @@ def generate_reply(message):
         messages=messages
     )
     messages.append({"role": "assistant", "content": response.choices[0].message.content})
+    print(response.choices[0].message.content)
     return (response.choices[0].message.content)
     
 # Send reply to frontend
