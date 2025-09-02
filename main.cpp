@@ -24,7 +24,7 @@ std::string getNPCResponse(const std::string& input) {
 int main() {
     sf::RenderWindow window(sf::VideoMode({800, 600}), "NPC Chatbot");
     window.setFramerateLimit(60);
-    sf::Font font("assets/fonts/arial.ttf");
+    sf::Font font("assets/fonts/ARIAL.ttf");
 
     // Create player
     sf::CircleShape player(50);
@@ -121,6 +121,14 @@ int main() {
         // Centre text
         sf::FloatRect inputBounds = inputText.getLocalBounds();
         inputText.setOrigin(inputBounds.size / 2.0f);
+        // Place text above NPC
+        npcText.setPosition({
+            npc.getPosition().x + npc.getRadius(),
+            npc.getPosition().y + npc.getRadius() - 80
+        });
+        // Centre text
+        sf::FloatRect bounds = npcText.getLocalBounds();
+        npcText.setOrigin(bounds.size / 2.0f);
             
         window.clear(sf::Color::Black);
         window.draw(player);
