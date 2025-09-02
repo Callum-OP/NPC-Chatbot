@@ -27,6 +27,7 @@ Special characters may not show correctly because of the font. (They look fine w
 Features to consider:
 Multiple NPCs.
 Can only speak to NPCs within a certain radius.
+Basic fallback dialogue for if the server cannot connect.
 
 # Things to note
 My laptop is not powerful enough to run gpt-oss-20b locally, so will use huggingface to use it remotely for free with a limited number of requests. The API key needs to be hidden so it can not be misused.
