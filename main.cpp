@@ -7,6 +7,7 @@
 
 using json = nlohmann::json;
 
+// Function to get reply from backend chatbot
 std::string getNPCResponse(const std::string& input) {
     httplib::Client cli("localhost", 5005);
     json payload = { {"message", input} };
@@ -19,6 +20,33 @@ std::string getNPCResponse(const std::string& input) {
 
     auto replyJson = json::parse(res->body);
     return replyJson["reply"];
+}
+
+// Function to wrap text when it is too long
+std::string wrapText(const std::string& text, const sf::Font& font, int characterSize, float maxWidth) {
+    std::string wrappedText;
+    std::string word;
+    sf::Text tempText(font, "", characterSize);
+
+    for (char c : text) {
+        if (c == ' ' || c == '\n') {
+            tempText.setString(wrappedText + word);
+            if (tempText.getLocalBounds().size.x > maxWidth) {
+                wrappedText += '\n';
+            }
+            wrappedText += word + c;
+            word.clear();
+        } else {
+            word += c;
+        }
+    }
+    // Add any remaining word
+    tempText.setString(wrappedText + word);
+    if (tempText.getLocalBounds().size.x > maxWidth) {
+        wrappedText += '\n';
+    }
+    wrappedText += word;
+    return wrappedText;
 }
 
 int main() {
@@ -83,13 +111,12 @@ int main() {
                 // If enter then send player input to npc
                 if (keyPressed->scancode == sf::Keyboard::Scan::Enter) {
                     std::string reply = getNPCResponse(playerInput);
-                    npcText.setString(reply);
+                    npcText.setString(wrapText(reply, font, npcText.getCharacterSize(), 200.f)); // Set NPC text and wrap it so it does not fall off the screen
                     playerInput.clear();
                     inputText.setString(""); // Clear the input display
                 }
             }
         }
-        inputText.setString(playerInput);
 
         // Move player with arrow keys
         // Diagonal
@@ -129,6 +156,8 @@ int main() {
         // Centre text
         sf::FloatRect bounds = npcText.getLocalBounds();
         npcText.setOrigin(bounds.size / 2.0f);
+
+        inputText.setString(wrapText(playerInput, font, inputText.getCharacterSize(), 200.f)); // Set player text and wrap it so it does not fall off the screen
             
         window.clear(sf::Color::Black);
         window.draw(player);
