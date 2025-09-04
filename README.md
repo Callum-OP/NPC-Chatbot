@@ -21,12 +21,11 @@ Type in text and hit enter to send a message to an NPC, you will see the text ap
 A chatbot feature designed with C++ SFML and Python Flask using Open AI gpt-oss-20b to give non player characters (NPCs) advanced dialogue options, making them able to respond to the player in real time with new and unique responses to what the player types/asks the NPC.
 
 Issues:
-Special characters may not show correctly because of the font. (They look fine when printing to console).
-While the backend can be told to respond simply it may later ignore these instructions and end up giving overly long responses or use special characters.
+Special characters may not show correctly because of the font. (They look fine when printing to console). Currently the AI has been told not to use special characters and seems to be complying.
+Sometimes text wraps when it does not need to.
 
 Features to consider:
 Multiple NPCs.
-Can only speak to NPCs within a certain radius.
 Basic fallback dialogue for if the server cannot connect.
 Shopkeeper that can sell items but only if the user as enough money.
 
