@@ -28,6 +28,7 @@ Features to consider:
 Multiple NPCs.
 Basic fallback dialogue for if the server cannot connect.
 Shopkeeper that can sell items but only if the user as enough money.
+Save NPC histories to database so that NPCs will not forget past cnvos if the backend server is reset.
 
 # Things to note
 My laptop is not powerful enough to run gpt-oss-20b locally, so will use huggingface to use it remotely for free with a limited number of requests. The API key needs to be hidden so it can not be misused.

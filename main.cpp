@@ -8,9 +8,9 @@
 using json = nlohmann::json;
 
 // Function to get reply from backend chatbot
-std::string getNPCResponse(const std::string& input) {
+std::string getNPCResponse(const std::string& input, const std::string& npc) {
     httplib::Client cli("localhost", 5005);
-    json payload = { {"message", input} };
+    json payload = { {"message", input}, {"npc_id", npc} };
 
     auto res = cli.Post("/chat", payload.dump(), "application/json");
     if (!res || res->status != 200) {
@@ -49,6 +49,32 @@ std::string wrapText(const std::string& text, const sf::Font& font, int characte
     return wrappedText;
 }
 
+struct NPC {
+    std::string id; // eg: "blacksmith"
+    sf::CircleShape shape;
+    sf::Text text;
+
+        NPC(const std::string& id,
+        const sf::Font& font,
+        sf::Vector2f pos,
+        float radius = 50.f,
+        sf::Color colour = sf::Color::White)
+    : id(id),
+      shape(radius), text(font, "", 20)
+    {
+        shape.setFillColor(colour);
+        shape.setPosition(pos);
+        // Place text above NPC
+        text.setPosition({
+            shape.getPosition().x + shape.getRadius() - 80,
+            shape.getPosition().y + shape.getRadius() - 120
+        });
+        // Centre text
+        sf::FloatRect bounds = text.getLocalBounds();
+        text.setOrigin(bounds.size / 2.0f);
+    }
+};
+
 int main() {
     sf::RenderWindow window(sf::VideoMode({800, 600}), "NPC Chatbot");
     window.setFramerateLimit(60);
@@ -73,54 +99,23 @@ int main() {
     inputText.setOrigin(inputBounds.size / 2.0f);
 
     // Create NPC
-    sf::CircleShape npc(50);
-    npc.setFillColor(sf::Color::White);
-    npc.setPosition({500, 250});
-
-    // Set up NPC text
-    sf::Text npcText(font, "", 20);
-    // Place text above NPC
-    npcText.setPosition({
-        npc.getPosition().x + npc.getRadius(),
-        npc.getPosition().y + npc.getRadius() - 80
-    });
-    // Centre text
-    sf::FloatRect bounds = npcText.getLocalBounds();
-    npcText.setOrigin(bounds.size / 2.0f);
+    std::vector<NPC> npcs;
+    npcs.emplace_back("blacksmith", font, sf::Vector2f{500, 250});
+    npcs.emplace_back("scholar", font, sf::Vector2f{700, 250});
 
     float talkRadius = 300.0f; // Only talk if player is this close
+    NPC* closeNPC = nullptr;
 
     while (window.isOpen()) {
-        // Set up player to NPC distance
-        sf::Vector2f npcPos = npc.getPosition();
-        sf::Vector2f playerPos = player.getPosition();
-        float distance = std::sqrt(std::pow(playerPos.x - npcPos.x, 2) + std::pow(playerPos.y - npcPos.y, 2)); // Calculate distance from player
-        
         // Process events
+        std::vector<sf::Event> events;
         while (const std::optional event = window.pollEvent())
         {
-            // If close to player (Can't type or chat unless close to an NPC)
-            if (distance <= talkRadius) {
-                // Check for player input or backspace
-                if (const auto* textEntered = event->getIf<sf::Event::TextEntered>()) {
-                    // If backspace then remove from input
-                    if (static_cast<char>(textEntered->unicode) == '\b' && !playerInput.empty()) {
-                        playerInput.pop_back();
-                    }
-                    // If a valid letter then add to input
-                    else if (textEntered->unicode < 128) {
-                        playerInput += static_cast<char>(textEntered->unicode); }
-                }
-                // Check for Enter key
-                if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>()) {
-                    // If enter then send player input to npc
-                    if (keyPressed->scancode == sf::Keyboard::Scan::Enter) {
-                        std::string reply = getNPCResponse(playerInput);
-                        npcText.setString(wrapText(reply, font, npcText.getCharacterSize(), 200.f)); // Set NPC text and wrap it so it does not fall off the screen
-                        playerInput.clear();
-                        inputText.setString(""); // Clear the input display
-                    }
-                }
+            sf::Event ev = *event;
+            events.push_back(ev);
+            // Close window properly
+            if (event->is<sf::Event::Closed>()) {
+                window.close();
             }
         }
 
@@ -154,22 +149,54 @@ int main() {
         // Centre text
         sf::FloatRect inputBounds = inputText.getLocalBounds();
         inputText.setOrigin(inputBounds.size / 2.0f);
-        // Place text above NPC
-        npcText.setPosition({
-            npc.getPosition().x + npc.getRadius(),
-            npc.getPosition().y + npc.getRadius() - 80
-        });
-        // Centre text
-        sf::FloatRect bounds = npcText.getLocalBounds();
-        npcText.setOrigin(bounds.size / 2.0f);
-
         inputText.setString(wrapText(playerInput, font, inputText.getCharacterSize(), 200.f)); // Set player text and wrap it so it does not fall off the screen
             
+        // Loop through NPCs
+        for (auto& npc : npcs) {
+            // Set up player to NPC distance
+            sf::Vector2f npcPos = npc.shape.getPosition();
+            sf::Vector2f playerPos = player.getPosition();
+            float distance = std::sqrt(std::pow(playerPos.x - npcPos.x, 2) + std::pow(playerPos.y - npcPos.y, 2)); // Calculate distance from player
+            // If close to player (Can't type or chat unless close to an NPC)
+            if (distance <= talkRadius) { 
+                closeNPC = &npc;
+            }
+        }
+
+        // Process events
+        for (auto& event : events) {
+            if (!closeNPC) return false; // Don't bother if there is no NPC nearby
+            NPC& npc = *closeNPC;
+
+            // Check for player input or backspace
+            if (const auto* textEntered = event.getIf<sf::Event::TextEntered>()) {
+                // If backspace then remove from input
+                if (static_cast<char>(textEntered->unicode) == '\b' && !playerInput.empty()) {
+                    playerInput.pop_back();
+                }
+                // If a valid letter then add to input
+                else if (textEntered->unicode < 128) {
+                    playerInput += static_cast<char>(textEntered->unicode); }
+            }
+            // Check for Enter key
+            if (const auto* keyPressed = event.getIf<sf::Event::KeyPressed>()) {
+                // If enter then send player input to npc
+                if (keyPressed->scancode == sf::Keyboard::Scan::Enter) {
+                    std::string reply = getNPCResponse(playerInput, npc.id);
+                    npc.text.setString(wrapText(reply, font, npc.text.getCharacterSize(), 200.f)); // Set NPC text and wrap it so it does not fall off the screen
+                    playerInput.clear();
+                    inputText.setString(""); // Clear the input display
+                }
+            }
+        }
+
         window.clear(sf::Color::Black);
         window.draw(player);
-        window.draw(npc);
-        window.draw(npcText);
         window.draw(inputText);
+        for (auto& npc : npcs) {
+            window.draw(npc.shape);
+            window.draw(npc.text);
+        }
         window.display();
     }
 
