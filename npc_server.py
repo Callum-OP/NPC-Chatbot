@@ -23,8 +23,8 @@ NPC_PROFILES = {
         "personality": "Curious and verbose, always quoting ancient texts and overexplaining."
     },
     "rogue": {
-        "name": "Silas",
-        "personality": "Sarcastic, street-smart, and always looking for an angle."
+        "name": "Emily",
+        "personality": "Sarcastic, street-smart, and in it for themself."
     }
 }
 
