@@ -1,10 +1,10 @@
 # How to run
 
 ## Prerequisites
-Ensure you use Windows
-Ensure you have Python installed (I used and tested this with version 3.11.9).
-(Optional) MSVC compiler if you want to rebuild the C++ frontend
-Ensure you have a Hugging Face account, then create a free API key and place it in a file titled: .env
+- Ensure you use Windows
+- Ensure you have Python installed (I used and tested this with version 3.11.9).
+- (Optional) MSVC compiler only if you want to rebuild the C++ frontend
+- Ensure you have a Hugging Face account, and from it a free API key that you can place it in a file in the project root directory titled: .env
 
 ## Steps
 1. Open a terminal in the project root directory.
@@ -50,6 +50,8 @@ cl /EHsc /std:c++17 main.cpp ^
   /link ^
   /LIBPATH:external\SFML-3.0.0\lib ^
   sfml-graphics.lib sfml-window.lib sfml-system.lib ws2_32.lib
+
+  I ran that command in the x64 Native Tools Command Prompt for VS 2022 in the project root directory.
 
 # Learning materials
 For Python backend AI
