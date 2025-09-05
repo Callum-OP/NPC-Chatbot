@@ -85,8 +85,14 @@ struct NPC {
 };
 
 int main() {
+    // Create game window and camera
     sf::RenderWindow window(sf::VideoMode({800, 600}), "NPC Chatbot");
     window.setFramerateLimit(60);
+    sf::View camera;
+    camera.setSize(sf::Vector2f(window.getSize().x, window.getSize().y));
+    window.setView(camera);
+
+    // Set font for text
     sf::Font font("assets/fonts/ARIAL.ttf");
 
     // Create player
@@ -115,8 +121,9 @@ int main() {
     npcs.emplace_back("shopkeeper", font, sf::Vector2f{100, 350});
 
     float talkRadius = 300.0f; // Only talk if player is this close
-    NPC* closeNPC = nullptr;
+    NPC* closeNPC = nullptr; // Store closest NPC
 
+    // Game loop
     while (window.isOpen()) {
         // Process events
         std::vector<sf::Event> events;
@@ -200,10 +207,12 @@ int main() {
                 }
             }
         }
-
+        // Draw and display the game window
         window.clear(sf::Color::Black);
         window.draw(player);
         window.draw(inputText);
+        camera.setCenter(player.getPosition());
+        window.setView(camera);
         for (auto& npc : npcs) {
             window.draw(npc.shape);
             window.draw(npc.text);
@@ -211,6 +220,5 @@ int main() {
         }
         window.display();
     }
-
     return 0;
 }
