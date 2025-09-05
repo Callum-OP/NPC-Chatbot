@@ -53,6 +53,7 @@ struct NPC {
     std::string id; // eg: "blacksmith"
     sf::CircleShape shape;
     sf::Text text;
+    sf::Text name;
 
         NPC(const std::string& id,
         const sf::Font& font,
@@ -60,7 +61,7 @@ struct NPC {
         float radius = 50.f,
         sf::Color colour = sf::Color::White)
     : id(id),
-      shape(radius), text(font, "", 20)
+      shape(radius), text(font, "", 20), name(font, id, 20)
     {
         shape.setFillColor(colour);
         shape.setPosition(pos);
@@ -70,8 +71,16 @@ struct NPC {
             shape.getPosition().y + shape.getRadius() - 120
         });
         // Centre text
-        sf::FloatRect bounds = text.getLocalBounds();
-        text.setOrigin(bounds.size / 2.0f);
+        sf::FloatRect textBounds = text.getLocalBounds();
+        text.setOrigin(textBounds.size / 2.0f);
+        // Place name text below NPC
+        name.setPosition({
+            shape.getPosition().x + shape.getRadius(),
+            shape.getPosition().y + shape.getRadius() + 80
+        });
+        // Centre name text
+        sf::FloatRect nameBounds = name.getLocalBounds();
+        name.setOrigin(nameBounds.size / 2.0f);
     }
 };
 
@@ -101,7 +110,9 @@ int main() {
     // Create NPC
     std::vector<NPC> npcs;
     npcs.emplace_back("blacksmith", font, sf::Vector2f{500, 250});
-    npcs.emplace_back("scholar", font, sf::Vector2f{700, 250});
+    npcs.emplace_back("professor", font, sf::Vector2f{750, 400});
+    npcs.emplace_back("thief", font, sf::Vector2f{300, 50});
+    npcs.emplace_back("shopkeeper", font, sf::Vector2f{100, 350});
 
     float talkRadius = 300.0f; // Only talk if player is this close
     NPC* closeNPC = nullptr;
@@ -196,6 +207,7 @@ int main() {
         for (auto& npc : npcs) {
             window.draw(npc.shape);
             window.draw(npc.text);
+            window.draw(npc.name);
         }
         window.display();
     }

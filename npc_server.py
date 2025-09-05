@@ -16,15 +16,19 @@ client = OpenAI(
 NPC_PROFILES = {
     "blacksmith": {
         "name": "James",
-        "personality": "Gruff but kind-hearted, loves talking about weapons and craftsmanship."
+        "personality": "Kind-hearted, loves talking about weapons and craftsmanship."
     },
-    "scholar": {
-        "name": "Bill",
-        "personality": "Curious and verbose, always quoting ancient texts and overexplaining."
+    "professor": {
+        "name": "Henry",
+        "personality": "Curious and interested in history, always quoting ancient texts and overexplaining."
     },
-    "rogue": {
+    "thief": {
         "name": "Emily",
         "personality": "Sarcastic, street-smart, and in it for themself."
+    },
+    "shopkeeper": {
+        "name": "Bill",
+        "personality": "Little patience and came here to set up a shop to sell items they have collected over the years."
     }
 }
 
