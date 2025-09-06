@@ -84,6 +84,8 @@ struct NPC {
         // Centre name text
         sf::FloatRect nameBounds = name.getLocalBounds();
         name.setOrigin(nameBounds.size / 2.0f);
+        // Colour text black
+        text.setFillColor(sf::Color::Black);
     }
 };
 
@@ -240,7 +242,30 @@ int main() {
         window.setView(camera);
         for (auto& npc : npcs) {
             window.draw(npc.shape);
-            if (npc.speaking == true) {
+           if (npc.speaking) {
+                // Draw text inside a speech bubble
+                // Get text bounds
+                sf::FloatRect textBounds = npc.text.getLocalBounds();
+                float padding = 5.f; // Add white space around text
+                // Create a white background rectangle with black outline
+                sf::RectangleShape bubble;
+                bubble.setFillColor(sf::Color::White);
+                bubble.setOutlineColor(sf::Color::Black);
+                bubble.setOutlineThickness(2.f);
+                // Size it to fit the text
+                bubble.setSize({
+                    textBounds.size.x + padding * 2,
+                    textBounds.size.y + padding * 2
+                });
+
+                // Position so that it fully covers the text
+                bubble.setPosition(
+                    {npc.text.getPosition().x + textBounds.position.x - padding,
+                    npc.text.getPosition().y + textBounds.position.y - padding}
+                );
+
+                // Draw speech bubble, then text
+                window.draw(bubble);
                 window.draw(npc.text);
             }
             window.draw(npc.name);
