@@ -221,7 +221,7 @@ int main() {
             if (npc.speaking) {
                 auto now = std::chrono::steady_clock::now();
                 float passedTime = std::chrono::duration<float>(now - npc.speakTime).count();
-                if (passedTime > 5.0f) {
+                if (passedTime > 7.0f) { // Show text for about 7 seconds
                     npc.speaking = false;
                 }
             }
