@@ -54,6 +54,8 @@ struct NPC {
     sf::CircleShape shape;
     sf::Text text;
     sf::Text name;
+    bool speaking = false;
+    std::chrono::steady_clock::time_point speakTime;
 
         NPC(const std::string& id,
         const sf::Font& font,
@@ -204,6 +206,16 @@ int main() {
                     npc.text.setString(wrapText(reply, font, npc.text.getCharacterSize(), 200.f)); // Set NPC text and wrap it so it does not fall off the screen
                     playerInput.clear();
                     inputText.setString(""); // Clear the input display
+                    npc.speaking = true;
+                    npc.speakTime = std::chrono::steady_clock::now();
+                }
+            }
+            // Check if enough time has passed to hide the text, if player doesn't move the text may stay for a while longer
+            if (npc.speaking == true) {
+                auto now = std::chrono::steady_clock::now();
+                float passedTime = std::chrono::duration<float>(now - npc.speakTime).count();
+                if (passedTime > 5.0f) {
+                    npc.speaking = false;
                 }
             }
         }
@@ -215,7 +227,9 @@ int main() {
         window.setView(camera);
         for (auto& npc : npcs) {
             window.draw(npc.shape);
-            window.draw(npc.text);
+            if (npc.speaking == true) {
+                window.draw(npc.text);
+            }
             window.draw(npc.name);
         }
         window.display();
