@@ -54,14 +54,15 @@ struct NPC {
     sf::CircleShape shape;
     sf::Text text;
     sf::Text name;
+    sf::Color colour;
     bool speaking = false;
     std::chrono::steady_clock::time_point speakTime;
 
         NPC(const std::string& id,
         const sf::Font& font,
         sf::Vector2f pos,
-        float radius = 50.f,
-        sf::Color colour = sf::Color::White)
+        sf::Color colour,
+        float radius = 50.f)
     : id(id),
       shape(radius), text(font, "", 20), name(font, id, 20)
     {
@@ -94,13 +95,20 @@ int main() {
     camera.setSize(sf::Vector2f(window.getSize().x, window.getSize().y));
     window.setView(camera);
 
+    // Create a background
+    const sf::Texture backgroundTex("assets/images/Village.png");
+    sf::Sprite background(backgroundTex);
+    float scaleX = static_cast<float>(window.getSize().x) / backgroundTex.getSize().x;
+    float scaleY = static_cast<float>(window.getSize().y) / backgroundTex.getSize().y;
+    background.setScale({scaleX * 2, scaleY * 2});
+
     // Set font for text
     sf::Font font("assets/fonts/ARIAL.ttf");
 
     // Create player
     sf::CircleShape player(50);
     player.setFillColor(sf::Color::Green);
-    player.setPosition({200, 250});
+    player.setPosition({650, 550});
     float speed = 3.f;
 
     // Set up player response
@@ -117,10 +125,10 @@ int main() {
 
     // Create NPC
     std::vector<NPC> npcs;
-    npcs.emplace_back("blacksmith", font, sf::Vector2f{500, 250});
-    npcs.emplace_back("professor", font, sf::Vector2f{750, 400});
-    npcs.emplace_back("thief", font, sf::Vector2f{300, 50});
-    npcs.emplace_back("shopkeeper", font, sf::Vector2f{100, 350});
+    npcs.emplace_back("blacksmith", font, sf::Vector2f{550, 350}, sf::Color::Black);
+    npcs.emplace_back("professor", font, sf::Vector2f{750, 800}, sf::Color::Cyan);
+    npcs.emplace_back("shopkeeper", font, sf::Vector2f{1040, 380}, sf::Color::Red);
+    npcs.emplace_back("thief", font, sf::Vector2f{320, 700}, sf::Color::Magenta);
 
     float talkRadius = 300.0f; // Only talk if player is this close
     NPC* closeNPC = nullptr; // Store closest NPC
@@ -180,12 +188,14 @@ int main() {
             // If close to player (Can't type or chat unless close to an NPC)
             if (distance <= talkRadius) { 
                 closeNPC = &npc;
+            } else {
+                closeNPC = nullptr;
             }
         }
 
         // Process events
         for (auto& event : events) {
-            if (!closeNPC) return false; // Don't bother if there is no NPC nearby
+            if (!closeNPC) break; // Don't bother if there is no NPC nearby
             NPC& npc = *closeNPC;
 
             // Check for player input or backspace
@@ -221,6 +231,7 @@ int main() {
         }
         // Draw and display the game window
         window.clear(sf::Color::Black);
+        window.draw(background);
         window.draw(player);
         window.draw(inputText);
         camera.setCenter(player.getPosition());
