@@ -29,7 +29,6 @@ Could be used in a game to give non player characters infinite dialogue options 
 
 ## Issues
 Special characters may not show correctly because of the font. Currently the AI has been told not to use special characters.
-Sometimes text wraps when it does not need to, an issue with the frontend.
 
 ## Future features
 Basic fallback dialogue for if the server cannot connect.
