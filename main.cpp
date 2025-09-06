@@ -24,29 +24,33 @@ std::string getNPCResponse(const std::string& input, const std::string& npc) {
 
 // Function to wrap text when it is too long
 std::string wrapText(const std::string& text, const sf::Font& font, int characterSize, float maxWidth) {
-    std::string wrappedText;
+    std::string wrapped;
     std::string word;
     sf::Text tempText(font, "", characterSize);
+    std::string currentLine;
+    std::istringstream words(text);
 
-    for (char c : text) {
-        if (c == ' ' || c == '\n') {
-            tempText.setString(wrappedText + word);
-            if (tempText.getLocalBounds().size.x > maxWidth) {
-                wrappedText += '\n';
-            }
-            wrappedText += word + c;
-            word.clear();
+    // Loop through all words 
+    while (words >> word) {
+        std::string testLine = currentLine.empty() ? word : currentLine + " " + word;
+        tempText.setString(testLine);
+
+        if (tempText.getLocalBounds().size.x > maxWidth) {
+            // Add current line and start new line
+            if (!wrapped.empty()) wrapped += '\n';
+            wrapped += currentLine;
+            currentLine = word;
         } else {
-            word += c;
+            currentLine = testLine;
         }
     }
-    // Add any remaining word
-    tempText.setString(wrappedText + word);
-    if (tempText.getLocalBounds().size.x > maxWidth) {
-        wrappedText += '\n';
+    // Add any remaining words
+    if (!currentLine.empty()) {
+        if (!wrapped.empty()) wrapped += '\n';
+        wrapped += currentLine;
     }
-    wrappedText += word;
-    return wrappedText;
+
+    return wrapped;
 }
 
 struct NPC {
