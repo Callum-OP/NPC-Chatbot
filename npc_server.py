@@ -51,7 +51,7 @@ def build_system_messages(profile):
         },
         {
             "role": "system",
-            "content": f"You are {profile['name']}, an NPC in a fantasy world, specifically a village. In the village there is Henry the professor, James the blacksmith, Emily the thief and Bill the shopkeeper"
+            "content": f"You are {profile['name']}, an NPC in a fantasy world, specifically a small village in the woods. In the village there is Henry the professor, James the blacksmith, Emily the thief and Bill the shopkeeper"
                        f"Your personality: {profile['personality']}. Stay in character at all times."
         }
     ]
