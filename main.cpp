@@ -232,38 +232,80 @@ int main() {
         sf::FloatRect inputBounds = inputText.getLocalBounds();
         inputText.setOrigin(inputBounds.size / 2.0f);
         inputText.setString(wrapText(playerInput, font, inputText.getCharacterSize(), 200.f)); // Set player text and wrap it so it does not fall off the screen
+        // Colour text
+        inputText.setFillColor(sf::Color::Black);
 
         // Draw and display the game window
         window.clear(sf::Color::Black);
         window.draw(background);
         window.draw(player);
-        window.draw(inputText);
+        // Draw text inside a speech bubble
+        std::string trimmedInput = playerInput;
+        // Remove whitespace
+        trimmedInput.erase(std::remove_if(trimmedInput.begin(), trimmedInput.end(), ::isspace), trimmedInput.end());
+        if (!trimmedInput.empty()) {
+            sf::FloatRect textBoundsP = inputText.getLocalBounds();
+            float padding = 5.f; // Add white space around text
+
+            // Create speech bubble
+            sf::RectangleShape bubble;
+            bubble.setFillColor(sf::Color::White);
+            bubble.setOutlineColor(sf::Color::Black);
+            bubble.setOutlineThickness(2.f);
+            // Size it to fit the text
+            bubble.setSize({textBoundsP.size.x + padding * 2, textBoundsP.size.y + padding * 2});
+
+            // Center text horizontally
+            inputText.setOrigin({textBoundsP.size.x / 2.f, 0.f});
+            // Calculate how far above the NPC to place the bubble
+            float baseOffset = player.getRadius() + 10.f;
+            float extraOffset = textBoundsP.size.y / 2.f;
+            // Position the text above the NPC
+            inputText.setPosition(
+                {player.getPosition().x + player.getRadius(),
+                player.getPosition().y - baseOffset - extraOffset}
+            );
+            // Recalculate bounds
+            textBoundsP = inputText.getLocalBounds();
+            // Position so that it fully covers the text
+            bubble.setOrigin({bubble.getSize().x / 2.f, 0.f});
+            bubble.setPosition({inputText.getPosition().x, inputText.getPosition().y + textBoundsP.position.y - padding});
+            // Draw speech bubble, then text
+            window.draw(bubble);
+            window.draw(inputText);
+        }
         camera.setCenter(player.getPosition());
         window.setView(camera);
         for (auto& npc : npcs) {
             window.draw(npc.shape);
+            // Draw text inside a speech bubble
            if (npc.speaking) {
-                // Draw text inside a speech bubble
-                // Get text bounds
                 sf::FloatRect textBounds = npc.text.getLocalBounds();
                 float padding = 5.f; // Add white space around text
-                // Create a white background rectangle with black outline
+
+                // Create speech bubble
                 sf::RectangleShape bubble;
                 bubble.setFillColor(sf::Color::White);
                 bubble.setOutlineColor(sf::Color::Black);
                 bubble.setOutlineThickness(2.f);
                 // Size it to fit the text
-                bubble.setSize({
-                    textBounds.size.x + padding * 2,
-                    textBounds.size.y + padding * 2
-                });
+                bubble.setSize({textBounds.size.x + padding * 2, textBounds.size.y + padding * 2});
 
-                // Position so that it fully covers the text
-                bubble.setPosition(
-                    {npc.text.getPosition().x + textBounds.position.x - padding,
-                    npc.text.getPosition().y + textBounds.position.y - padding}
+                // Center text horizontally
+                npc.text.setOrigin({textBounds.size.x / 2.f, 0.f});
+                // Calculate how far above the NPC to place the bubble
+                float baseOffset = npc.shape.getRadius() + 10.f;
+                float extraOffset = textBounds.size.y / 2.f;
+                // Position the text above the NPC
+                npc.text.setPosition(
+                    {npc.shape.getPosition().x + npc.shape.getRadius(),
+                    npc.shape.getPosition().y - baseOffset - extraOffset}
                 );
-
+                // Recalculate bounds
+                textBounds = npc.text.getLocalBounds();
+                // Position so that it fully covers the text
+                bubble.setOrigin({bubble.getSize().x / 2.f, 0.f});
+                bubble.setPosition({npc.text.getPosition().x, npc.text.getPosition().y + textBounds.position.y - padding});
                 // Draw speech bubble, then text
                 window.draw(bubble);
                 window.draw(npc.text);
