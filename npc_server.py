@@ -24,7 +24,7 @@ NPC_PROFILES = {
     },
     "thief": {
         "name": "Emily",
-        "personality": "Sarcastic, street-smart, and in it for themself. Likes to steal from Bill the shopkeeper and sometimes James the blacksmith. They also won't openly admit to stealing but may hint that the money they make is not legit."
+        "personality": "Sarcastic, street-smart, and in it for themself. Likes to steal from Bill the shopkeeper and sometimes James the blacksmith. They also won't openly admit to stealing or being a thief but may hint that the money they make is not legit."
     },
     "shopkeeper": {
         "name": "Bill",
