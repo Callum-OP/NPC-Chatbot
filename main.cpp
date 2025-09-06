@@ -168,16 +168,6 @@ int main() {
         } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Down)) {
             player.move({0.0f, speed});
         }
-
-        // Place text above Player
-        inputText.setPosition({
-            player.getPosition().x + player.getRadius(),
-            player.getPosition().y + player.getRadius() - 80
-        });
-        // Centre text
-        sf::FloatRect inputBounds = inputText.getLocalBounds();
-        inputText.setOrigin(inputBounds.size / 2.0f);
-        inputText.setString(wrapText(playerInput, font, inputText.getCharacterSize(), 200.f)); // Set player text and wrap it so it does not fall off the screen
             
         // Loop through NPCs
         for (auto& npc : npcs) {
@@ -188,14 +178,12 @@ int main() {
             // If close to player (Can't type or chat unless close to an NPC)
             if (distance <= talkRadius) { 
                 closeNPC = &npc;
-            } else {
-                closeNPC = nullptr;
             }
         }
 
         // Process events
         for (auto& event : events) {
-            if (!closeNPC) break; // Don't bother if there is no NPC nearby
+            if (!closeNPC) continue; // Don't bother if there is no NPC nearby
             NPC& npc = *closeNPC;
 
             // Check for player input or backspace
@@ -220,8 +208,11 @@ int main() {
                     npc.speakTime = std::chrono::steady_clock::now();
                 }
             }
-            // Check if enough time has passed to hide the text, if player doesn't move the text may stay for a while longer
-            if (npc.speaking == true) {
+        }
+
+        // Check if enough time has passed to hide the text
+        for (auto& npc : npcs) {
+            if (npc.speaking) {
                 auto now = std::chrono::steady_clock::now();
                 float passedTime = std::chrono::duration<float>(now - npc.speakTime).count();
                 if (passedTime > 5.0f) {
@@ -229,6 +220,17 @@ int main() {
                 }
             }
         }
+
+        // Place text above Player
+        inputText.setPosition({
+            player.getPosition().x + player.getRadius(),
+            player.getPosition().y + player.getRadius() - 80
+        });
+        // Centre text
+        sf::FloatRect inputBounds = inputText.getLocalBounds();
+        inputText.setOrigin(inputBounds.size / 2.0f);
+        inputText.setString(wrapText(playerInput, font, inputText.getCharacterSize(), 200.f)); // Set player text and wrap it so it does not fall off the screen
+
         // Draw and display the game window
         window.clear(sf::Color::Black);
         window.draw(background);
