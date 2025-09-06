@@ -94,8 +94,11 @@ struct NPC {
 };
 
 int main() {
+    // Get the current desktop resolution
+    sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+
     // Create game window and camera
-    sf::RenderWindow window(sf::VideoMode({800, 600}), "NPC Chatbot");
+    sf::RenderWindow window(desktop, "NPC Chatbot");
     window.setFramerateLimit(60);
     sf::View camera;
     camera.setSize(sf::Vector2f(window.getSize().x, window.getSize().y));
@@ -104,8 +107,8 @@ int main() {
     // Create a background
     const sf::Texture backgroundTex("assets/images/Village.png");
     sf::Sprite background(backgroundTex);
-    float scaleX = static_cast<float>(window.getSize().x) / backgroundTex.getSize().x;
-    float scaleY = static_cast<float>(window.getSize().y) / backgroundTex.getSize().y;
+    float scaleX = static_cast<float>(800) / backgroundTex.getSize().x;
+    float scaleY = static_cast<float>(600) / backgroundTex.getSize().y;
     background.setScale({scaleX * 2, scaleY * 2});
 
     // Set font for text
