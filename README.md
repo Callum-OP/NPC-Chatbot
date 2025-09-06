@@ -25,10 +25,9 @@ C++ SFML frontend for rendering and player interaction.
 Python Flask backend for handling AI responses.
 OpenAI gpt-oss-20b model (via Hugging Face) for generating NPC dialogue.
 
-Could be used in a game to give non player characters infinite dialogue options while staying in character.
+Could be used in a game to give non player characters infinite dialogue options while staying in character. I drew a background image of a village to show how this could look in a game setting.
 
 ## Issues
-Sometimes it seems random which NPC responds, it is not always the closest one.
 Special characters may not show correctly because of the font. Currently the AI has been told not to use special characters.
 Sometimes text wraps when it does not need to, an issue with the frontend.
 
