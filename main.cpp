@@ -9,8 +9,13 @@ using json = nlohmann::json;
 
 // Function to get reply from backend chatbot
 std::string getNPCResponse(const std::string& input, const std::string& npc) {
+    std::string npcLower = npc; // Make a mutable copy
+    for (char &c : npcLower) {
+        c = std::tolower(static_cast<unsigned char>(c));
+    }
+
     httplib::Client cli("localhost", 5005);
-    json payload = { {"message", input}, {"npc_id", npc} };
+    json payload = { {"message", input}, {"npc_id", npcLower} };
 
     auto res = cli.Post("/chat", payload.dump(), "application/json");
     if (!res || res->status != 200) {
@@ -134,10 +139,10 @@ int main() {
 
     // Create NPC
     std::vector<NPC> npcs;
-    npcs.emplace_back("blacksmith", font, sf::Vector2f{550, 350}, sf::Color::Black);
-    npcs.emplace_back("professor", font, sf::Vector2f{750, 800}, sf::Color::Cyan);
-    npcs.emplace_back("shopkeeper", font, sf::Vector2f{1040, 380}, sf::Color::Red);
-    npcs.emplace_back("thief", font, sf::Vector2f{320, 700}, sf::Color::Magenta);
+    npcs.emplace_back("Blacksmith", font, sf::Vector2f{550, 350}, sf::Color::Black);
+    npcs.emplace_back("Professor", font, sf::Vector2f{750, 800}, sf::Color::Cyan);
+    npcs.emplace_back("Shopkeeper", font, sf::Vector2f{1040, 380}, sf::Color::Red);
+    npcs.emplace_back("Thief", font, sf::Vector2f{320, 700}, sf::Color::Magenta);
 
     float talkRadius = 300.0f; // Only talk if player is this close
     NPC* closeNPC = nullptr; // Store closest NPC
