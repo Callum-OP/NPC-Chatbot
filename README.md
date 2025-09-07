@@ -1,18 +1,23 @@
+# Demo Video
+
+
+https://github.com/user-attachments/assets/c9189636-ebfa-4845-b2a3-dc129bccfce9
+
+
+
 # How to run
 
 ## Prerequisites
-- Ensure you use Windows
-- Ensure you have Python installed (I used and tested this with version 3.11.9).
-- (Optional) MSVC compiler only if you want to rebuild the C++ frontend
-- Ensure you have a Hugging Face account, and from it a free API key that you can place it in a file in the project root directory titled: .env
+1. Ensure you use Windows (I have only tested this in Windows).
+2. Ensure you have Python installed (I used and tested this with version 3.11.9).
+3. Ensure you have a Hugging Face account.
 
 ## Steps
-1. Open a terminal in the project root directory.
-2. Type this command to install Python dependencies: 
-    pip install -r requirements.txt
-3. Type this command to start the backend server:
-    Run: python npc_server.py
-4. Simply open main.exe to play
+1. From your Hugging Face account, get a free API key that you can place in a file in the project root directory titled: .env
+2. Open a terminal in the project root directory.
+3. Type this command to install Python dependencies: pip install -r requirements.txt
+4. Type this command to start the backend server: python npc_server.py
+5. Simply open main.exe to play
 
 # How to play
 Move the player with arrow keys.
